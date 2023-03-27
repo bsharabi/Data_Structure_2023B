@@ -83,17 +83,18 @@ public class DLinkedList<T> implements List<T> {
 
     @Override
     public boolean add(T t) {
-        if (isEmpty()) {
-            head = tail = new Node<>(t);
-
+        Node<T> newNode = new Node<>(t);
+        if (head == null) {
+            head = tail = newNode;
         } else {
-            Node<T> newNode =new Node<>(t);
             tail.setNext(newNode);
             newNode.setPrev(tail);
-            tail = tail.getNext();
+            tail = newNode;
         }
+
         size++;
         return true;
+
     }
 
     @Override
@@ -103,18 +104,20 @@ public class DLinkedList<T> implements List<T> {
             return false;
         if (head.getValue().equals(o)) {
             head = head.getNext();
+            head.setPrev(null);
             flag = true;
         }
         if (tail.getValue().equals(o) && !flag) {
             tail = tail.getPrev();
+            tail.setNext(null);
             flag = true;
         }
-
         Node<T> temp = head;
         while (temp.hasNext() && !flag) {
             if (temp.getValue().equals(o)) {
 
                 temp.getPrev().setNext(temp.getNext());
+                temp.getNext().setPrev(temp.getPrev());
                 flag = true;
                 break;
             }

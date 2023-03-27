@@ -1,6 +1,5 @@
 package L01;
 
-import java.util.Iterator;
 import java.util.Random;
 
 public class Main {
