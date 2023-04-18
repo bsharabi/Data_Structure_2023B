@@ -21,10 +21,11 @@ public class BST {
         size++;
     }
 
+
     private BinNode<Integer> add(BinNode<Integer> node, int value) {
         if (node == null)
             return new BinNode<>(value);
-        if (node.getValue() > value) {
+        if (value < node.getValue()) {
             node.setLeft(add(node.getLeft(), value));
         } else {
             node.setRight(add(node.getRight(), value));

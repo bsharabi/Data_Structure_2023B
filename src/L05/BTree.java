@@ -4,6 +4,15 @@ import java.util.Random;
 
 public class BTree<T> {
 
+    public static void main(String[] args) {
+
+        BTree T = new BTree();
+        T.insert(12);
+
+        T.Search(12);
+
+    }
+
     private BinNode<T> root;
     private int size;
     private Random rd;
@@ -12,6 +21,40 @@ public class BTree<T> {
         this.root = null;
         size = 0;
         rd = new Random();
+    }
+
+    public void insert(T value) {
+        root = insert(root, value);
+    }
+
+    private BinNode<T> insert(BinNode<T> node, T value) {
+
+        if (node == null)
+            return new BinNode<>(value);
+
+        if (rd.nextBoolean()) {
+            node.setLeft(insert(node.getLeft(), value));
+        } else {
+            node.setRight(insert(node.getRight(), value));
+        }
+        return node;
+    }
+
+
+    public boolean Search(T value) {
+
+        return Search(root, value);
+    }
+
+    private boolean Search(BinNode<T> node, T value) {
+
+        if (node == null)
+            return false;
+
+        if (node.getValue().equals(value))
+            return true;
+
+        return Search(node.getLeft(), value) || Search(node.getRight(), value);
     }
 
     public void add(T value) {
