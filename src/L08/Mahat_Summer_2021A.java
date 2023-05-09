@@ -5,7 +5,6 @@ import java.util.*;
 public class Mahat_Summer_2021A {
     static Scanner in = new Scanner(System.in);
     static Random rd = new Random();
-
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_PURPLE = "\u001B[35m";
@@ -22,7 +21,6 @@ public class Mahat_Summer_2021A {
                     Tablet t = new Tablet();
                     Tablet t1 = new Tablet();
                     t.isSame(t1);
-
                     break;
                 case 2:
                     Queue<Integer> queue = new LinkedList<Integer>() {{
@@ -42,7 +40,6 @@ public class Mahat_Summer_2021A {
                     A a = new A();
                     B b = new B();
                     A ab = new B();
-
                     a.f();
                     ab.f();
                     b.f();
@@ -51,7 +48,6 @@ public class Mahat_Summer_2021A {
                     b.g();
                     ((B) (ab)).superG();
                     b.superG();
-
 //                    a.superG();
 //                    ((B)a).superG();
                     System.out.println("שגיאת קומפילציה, לא ניתן לקרוא לפונקציה שלא קיימת במחלקה או במי שמרחיב אותה אם בכלל");
@@ -72,15 +68,13 @@ public class Mahat_Summer_2021A {
 //                    System.out.println (a1.weight); תקין
 //                    System.out.println (((Banana)a2).getWeight()); זמן ריצה
 //                    System.out.println (a1.equals(a2)); תקין
-                    System.out.println(a2.equals(a1));
-                    System.out.println(b1.equals(b2));
-                    System.out.println(b2.equals(b1));
-                    System.out.println(a1.equals((Banana) b2));
-                    System.out.println(a1.equals((Apple) a2));
-                    System.out.println(b1.equals((Apple) a2));
-                    System.out.println(b1.equals((Banana) a2));
-
-
+//                    System.out.println(a2.equals(a1));
+//                    System.out.println(b1.equals(b2));
+//                    System.out.println(b2.equals(b1));
+//                    System.out.println(a1.equals((Banana) b2));
+//                    System.out.println(a1.equals((Apple) a2));
+//                    System.out.println(b1.equals((Apple) a2));
+//                    System.out.println(b1.equals((Banana) a2));
                     break;
                 case 7:
                     break;
@@ -140,6 +134,31 @@ public class Mahat_Summer_2021A {
     private static Queue<Integer> Q2(Queue<Integer> queue) {
         if (queue == null)
             return null;
+        Queue<Integer> q = new LinkedList<>();
+        int size = queue.size();// במבחן צריך לכתוב את הפונקציה
+
+        while (!queue.isEmpty()) {
+            int cnt = 1;
+            int item1 = queue.remove();
+            size--;
+            for (int i = 0; i < size; i++) {
+                int item2 = queue.remove();
+                if (item1 == item2) {
+                    cnt++;
+                    size--;
+                } else {
+                    queue.add(item2);
+                }
+            }
+            if (cnt > 2)
+                q.add(item1);
+        }
+        return q;
+    }
+
+    static public Queue<Integer> Q2_(Queue<Integer> queue) {
+        if (queue == null)
+            return null;
         //queue={}
         //q1={}
         //q={2}
@@ -179,7 +198,7 @@ public class Mahat_Summer_2021A {
         }
 
         public void g() {
-            f();
+            this.f();
         }
 
 
@@ -202,39 +221,53 @@ public class Mahat_Summer_2021A {
     static public class Store {
         private Tablet[] tablets;
         private int[] systems;
-        private int index = 0;
-
 
         public Store() {
             tablets = new Tablet[1000];
             systems = new int[3];
-            index = 0;
         }
 
         public boolean addTablet(Tablet tab) {
+
             if (tab == null)
                 return false;
 
+            int index = systems[0] + systems[1] + systems[2];
             if (index >= tablets.length)
                 return false;
-            for (int i = 0; i < tablets.length; i++) {
+
+            for (int i = 0; i < index; i++) {
                 if (tab.isSame(tablets[i])) {
-                    tablets[i].setPrice(Math.max(tab.getPrice(), tablets[i].getPrice()));
+                    tablets[i].setPrice(Math.max(tablets[i].getPrice(), tab.getPrice()));
                     return true;
                 }
             }
-            tablets[index++] = tab;
+            tablets[index] = tab;
+            switch (tab.getSystem()) {
+
+                case 'A':
+                    systems[1]++;
+                    break;
+                case 'I':
+                    systems[2]++;
+                    break;
+                case 'W':
+                    systems[0]++;
+                    break;
+            }
             return true;
         }
 
+
         // יש לנסות לפתור את התרגיל גם ללא שימוש במבנה נתונים.
         public int sortStore() {
+            int index = systems[0] + systems[1] + systems[2];
             LinkedList<Tablet> win = new LinkedList<>();
             LinkedList<Tablet> ios = new LinkedList<>();
             LinkedList<Tablet> android = new LinkedList<>();
 
             for (int i = 0; i < index; i++) {
-                switch (tablets[i].getiOS()) {
+                switch (tablets[i].getSystem()) {
                     case 'W':
                         win.add(tablets[i]);
                         break;
@@ -245,40 +278,50 @@ public class Mahat_Summer_2021A {
                         android.add(tablets[i]);
                         break;
                 }
-                int index = 0;
+                int j = 0;
                 while (!win.isEmpty())
-                    tablets[index++] = win.removeFirst();
+                    tablets[j++] = win.removeFirst();
                 while (!android.isEmpty())
-                    tablets[index++] = android.removeFirst();
+                    tablets[j++] = android.removeFirst();
                 while (!ios.isEmpty())
-                    tablets[index++] = ios.removeFirst();
+                    tablets[j++] = ios.removeFirst();
             }
-
             return tablets.length - index;
         }
     }
 
-
     static public class Tablet {
         private String name;
         private String kind;
-        private char iOS;
+        private char system;
         private double size;
         private double price;
 
         public Tablet() {
         }
 
-        public Tablet(String name, String kind, char iOS, double size, double price) {
+
+        public boolean isSame(Tablet other) {
+            if (other == null)
+                return false;
+            return name.equals(other.name) && kind.equals(other.kind) && size == other.size;
+
+        }
+
+        public Tablet(String name, String kind, char system, double size, double price) {
             this.name = name;
             this.kind = kind;
-            this.iOS = iOS;
+            this.system = system;
             this.size = size;
             this.price = price;
         }
 
-        public boolean isSame(Tablet other) {
-            return name.equals(other.name) && kind.equals(other.kind) && size == other.size;
+        public char getSystem() {
+            return system;
+        }
+
+        public void setSystem(char system) {
+            this.system = system;
         }
 
         public String getName() {
@@ -297,13 +340,6 @@ public class Mahat_Summer_2021A {
             this.kind = kind;
         }
 
-        public char getiOS() {
-            return iOS;
-        }
-
-        public void setiOS(char iOS) {
-            this.iOS = iOS;
-        }
 
         public double getSize() {
             return size;
@@ -321,5 +357,4 @@ public class Mahat_Summer_2021A {
             this.price = price;
         }
     }
-
 }
