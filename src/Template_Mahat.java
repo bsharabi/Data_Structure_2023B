@@ -49,5 +49,47 @@ public class Template_Mahat {
         }
     }
 
+    static class Node<E> {
+        private Node<E> next;
+        private E value;
+
+        public Node(E value) {
+            this.value = value;
+            this.next = null;
+        }
+
+        public Node(Node<E> next, E value) {
+            this.next = next;
+            this.value = value;
+        }
+
+        public Node<E> getNext() {
+            return next;
+        }
+
+        public void setNext(Node<E> next) {
+            this.next = next;
+        }
+
+        public E getValue() {
+            return value;
+        }
+
+        public void setValue(E value) {
+            this.value = value;
+        }
+
+        public boolean hasNext() {
+            return next != null;
+        }
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "next=" + next +
+                    ", value=" + value +
+                    '}';
+        }
+    }
 }
 

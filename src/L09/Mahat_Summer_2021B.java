@@ -16,7 +16,6 @@ public class Mahat_Summer_2021B {
     public static void main(String[] args) {
         boolean bool;
 
-
         while (true) {
             System.out.println("Enter q number");
             int numberQ = in.nextInt();
@@ -36,6 +35,10 @@ public class Mahat_Summer_2021B {
                     bool = Q1_b(q, 4);
                     break;
                 case 2:
+                    Node<Integer> n = new Node<>(1);
+                    bool = Q2_a(n);
+                    System.out.println(bool);
+                    bool = Q2_b(n);
                     break;
                 case 3:
 //                    B b1 = new A();
@@ -74,6 +77,46 @@ public class Mahat_Summer_2021B {
                     return;
             }
         }
+    }
+
+    private static int sumNodes(Node<Integer> node) {
+        if (node == null)
+            return 0;
+        int sum = node.getValue();
+        node = node.getNext();
+        while (node != null) {
+            sum += node.getValue();
+            node = node.getNext();
+        }
+        return sum;
+    }
+
+    // תנסו לשפר את הסיבוכיות מO(n^2) ל- O(n)
+    private static boolean Q2_b(Node<Integer> node) {
+        if (node == null)
+            return false;
+        //128 -> 64 -> 32 -> 16 -> 8 -> 4 -> 2 -> 2
+        while (node != null) {
+            int value = node.getValue();
+            node = node.getNext();
+            if (sumNodes(node) != value)
+                return false;
+        }
+        return true;
+    }
+
+    private static boolean Q2_a(Node<Integer> node) {
+        if (node == null)
+            return false;
+        int temp = node.getValue();
+        node = node.getNext();
+        while (node != null) {
+            if (temp != node.getValue())
+                return false;
+            temp += node.getValue();
+            node = node.getNext();
+        }
+        return true;
     }
 
     static class Payment {
@@ -254,7 +297,7 @@ public class Mahat_Summer_2021B {
     }
 
 
-    //-------------------- Q3_A ----------------------------
+    //--------------- Q3_A First option -------------------
 //    static class A extends D {
 //    }
 //
@@ -266,6 +309,19 @@ public class Mahat_Summer_2021B {
 //
 //    static class D extends B {
 //    }
+    //--------------- Q3_A Second option ------------------
+//    static class A extends B {
+//    }
+//
+//    static class D {
+//    }
+//
+//    static class C extends A {
+//    }
+//
+//    static class B extends D {
+//    }
+
     //-------------------- Q3_B ----------------------------
     //    static class A extends B {};
     //    static class B{};
@@ -273,8 +329,10 @@ public class Mahat_Summer_2021B {
     //    static class D extends A{};
 
     private static boolean Q1_b(Queue<Integer> q, int N) {
-        if (q == null || N < 0)
+        if (q == null || N <= 0)
             return false;
+        //{1,2,2,3,3,3,4, } N=4
+        //{1,2,2,3,3,3,4,4,4,4,6,9,8,7,8,5,4,4} N=4
         //{6,9,8,7,8,5,4,4} N=4
         for (int i = 1; i <= N; i++) {
             for (int j = 0; j < i; j++) {
@@ -287,7 +345,7 @@ public class Mahat_Summer_2021B {
     }
 
     private static Queue<Integer> Q1_a(int N) {
-        if (N < 0)
+        if (N <= 0)
             return null;
         Queue<Integer> queue = new LinkedList<>();
         for (int i = 1; i <= N; i++) {
@@ -347,7 +405,7 @@ public class Mahat_Summer_2021B {
             countC++;
             System.out.println("C is " + (a.getN() + this.n));
         }
-        
+
         public void print() {
             super.print();
             this.a.print();
